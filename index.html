@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title> </title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"> </script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css"  rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+  <script src="scripts/buttonStuff.js"></script>
+  <script src="scripts/checkboxNonsense.js"></script>
+  <script src="scripts/nciGeoJson.js"></script>
+  <script src="scripts/stateDictionaries.js"></script>
+  <script src="scripts/dataSelectLists.js"></script>
+  <script src="scripts/addSourcesAndLayers.js"></script>
+  <script src="scripts/swogHoverStates.js"></script>
+  <script src="scripts/stateList.js"></script>
+  <script src="scripts/institutesAndClusters.js"></script>
+  <script src="scripts/draggable.js"></script>
+  <script src="scripts/viewChanger.js"></script>
+  <script src="scripts/filtersAndDataManipulation.js"></script>
+  <script src="scripts/miscellaneous.js"></script>
+  <script src="scripts/matchColoring.js"></script>
+  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/draggable.css">
+  <style>
+
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id='title'>
+  Accrual to SWOG Studies
+</div>
+<div id="viewbox" style="position:fixed;S">
+<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="lowerNAView()">Lower NA</button></div>
+<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullNAView()">Full NA</button></div>
+<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullWorldView()">Full World</button></div>
+</div>
+  <div class="draggable" id="drag-1" style="left:10px;top:70px;z-index:15;">
+    <div class="widnow" id="win-1" style="background-color:#FFFFFF;">
+      <div class="title_bar" id="bar-1" style="background-color:#800080">
+        <div>
+          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-1">&nbsp&nbspInstitutions*</span>
+            <div class="button" id="butt-1">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-1" style="font-family:'Arial',monospace;padding:5px;background-color:transparent">
+        <input type="checkbox" id="all-inst" name="all-inst" value=true checked onclick="toggle_Institutions()">
+        <label for="inst">Show Institutions</label><br>
+        <input type="checkbox" id="cluster-but" name="cluster-but" value=true onclick="toggle_Clusters()">
+        <label for="cluster-but">Show Clusters</label><br>
+        <i>*U.S. only</i>
+      </div>
+    </div>
+  </div>
+
+  <div class="draggable" id="drag-2" style="left:10px;top:195px;z-index:15;">
+    <div class="widnow" id="win-2" style="background-color:#FFFFFF;width:220px;">
+      <div class="title_bar" id="bar-2" style="background-color:#800080">
+        <div>
+          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-2">&nbsp&nbspData Select</span>
+            <div class="button" id="butt-2">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-2" style="font-family:'Arial',monospace;padding:10px;background-color:transparent">
+        <div style="position:absolute; left:40%">
+          <span style='font-size:12px;display: inline-block;'>*Double click an option <br /> to toggle one or all</span><br>
+        </div>
+        <div>
+          <button type="button" class="fly-button" style="text-align: center; margin-bottom:5px; position:relative;z-index: 99;" onclick="setAllDataCheckboxes()">All</button>
+        </div>
+        <div id="data-select2" style="position: absolute; left:130px; top:82px;">
+          <span style="text-decoration: underline;">Admin:</span>
+          <div id="admin-choice">
+            <div id="admin-0">
+              <input type="checkbox" id="type-ccd" name="type-ccd" value="type-ccd" onchange="toggle_blinker()" checked>
+              <label for="type-ccd">CCD</label>
+            </div>
+            <div id="admin-1">
+              <input type="checkbox" id="type-breast" name="type-breast" value="type-breast" onchange="toggle_blinker()" checked>
+              <label for="type-breast">Breast</label>
+            </div>
+            <div id="admin-2">
+              <input type="checkbox" id="type-gi" name="type-gi" value="type-gi" onchange="toggle_blinker()" checked>
+              <label for="type-gi">GI</label>
+            </div>
+            <div id="admin-3">
+              <input type="checkbox" id="type-sxqol" name="type-sxqol" value="type-sxqol" onchange="toggle_blinker()" checked>
+              <label for="type-sxqol">Sxqol</label>
+            </div>
+            <div id="admin-4">
+              <input type="checkbox" id="type-erlytx" name="type-erlytx" value="type-erlytx" onchange="toggle_blinker()" checked>
+              <label for="type-erlytx">Erlytx</label>
+            </div>
+            <div id="admin-5">
+              <input type="checkbox" id="type-lung" name="type-lung" value="type-lung" onchange="toggle_blinker()" checked>
+              <label for="type-lung">Lung</label>
+            </div>
+            <div id="admin-6">
+              <input type="checkbox" id="type-melan" name="type-melan" value="type-melan" onchange="toggle_blinker()" checked>
+              <label for="type-melan">Melan</label>
+            </div>
+            <div id="admin-7">
+              <input type="checkbox" id="type-peolc" name="type-peolc" value="type-peolc" onchange="toggle_blinker()" checked>
+              <label for="type-peolc">Peolc</label>
+            </div>
+            <div id="admin-8">
+              <input type="checkbox" id="type-mmyel" name="type-mmyel" value="type-mmyel" onchange="toggle_blinker()" checked>
+              <label for="type-mmyel">Mmyel</label>
+            </div>
+            <div id="admin-9">
+              <input type="checkbox" id="type-gu" name="type-gu" value="type-gu" onchange="toggle_blinker()" checked>
+              <label for="type-gu">GU</label>
+            </div>
+            <div id="admin-10">
+              <input type="checkbox" id="type-prev" name="type-prev" value="type-prev" onchange="toggle_blinker()" checked>
+              <label for="type-prev">Prev</label>
+            </div>
+            <div id="admin-11">
+              <input type="checkbox" id="type-leuk" name="type-leuk" value="type-leuk" onchange="toggle_blinker()" checked>
+              <label for="type-leuk">Leuk</label>
+            </div>
+            <div id="admin-12">
+              <input type="checkbox" id="type-lymph" name="type-lymph" value="type-lymph" onchange="toggle_blinker()" checked>
+              <label for="type-lymph">Lymph</label>
+            </div>
+            <div id="admin-13">
+              <input type="checkbox" id="type-surv" name="type-surv" value="type-surv" onchange="toggle_blinker()" checked>
+              <label for="type-surv">Surv</label>
+            </div>
+          </div>
+          <br>
+          <span style="text-decoration: underline;">RevAgency:</span>
+          <div id="rev-choice">
+            <div id='rev-0'>
+              <input type="checkbox" id="rev-ctep" name="rev-ctep" value="revctep" onchange="toggle_blinker()" checked>
+              <label for="rev-ctep">CTEP</label>
+            </div>
+            <div id="rev-1">
+              <input type="checkbox" id="rev-dcp" name="rev-dcp" value="revdcp" onchange="toggle_blinker()" checked>
+              <label for="rev-dcp">DCP</label>
+            </div>
+            <div id="rev-2">
+              <input type="checkbox" id="rev-roth" name="rev-roth" value="revroth" onchange="toggle_blinker()" checked>
+              <label for="rev-roth">Other</label>
+            </div>
+          </div>
+        </div>
+        <div id="data-select" style="">
+          <span style="text-decoration: underline;">Year:</span>
+          <div id="year-choice0">
+            <div id='year-0'>
+              <input type="checkbox" id="year2015" name="year2015" value="2015" onchange="toggle_blinker()" checked>
+              <label for="year2015">2015</label>
+            </div>
+            <div id='year-1'>
+              <input type="checkbox" id="year2016" name="year2016" value="2016" onchange="toggle_blinker()" checked>
+              <label for="year2016">2016</label>
+            </div>
+            <div id='year-2'>
+              <input type="checkbox" id="year2017" name="year2017" value="2017" onchange="toggle_blinker()" checked>
+              <label for="year2017">2017</label>
+            </div>
+            <div id='year-3'>
+              <input type="checkbox" id="year2018" name="year2018" value="2018" onchange="toggle_blinker()" checked>
+              <label for="year2018">2018</label>
+            </div>
+            <div id='year-4'>
+              <input type="checkbox" id="year2019" name="year2019" value="2019" onchange="toggle_blinker()" checked>
+              <label for="year2019">2019</label>
+            </div>
+            <div id='year-5'>
+              <input type="checkbox" id="year2020" name="year2020" value="2020" onchange="toggle_blinker()" checked>
+              <label for="year2020">2020</label>
+            </div>
+          </div>
+          <br>
+          <span style="text-decoration: underline;">Study Type:</span>
+          <div id="study-type">
+            <div id="st-1">
+              <input type="checkbox" id="type-1" name="type-1" value="type-1" onchange="toggle_blinker()" checked>
+              <label for="type-1">I</label>
+            </div>
+            <div id="st-12">
+              <input type="checkbox" id="type-12" name="type-12" value="type-12" onchange="toggle_blinker()" checked>
+              <label for="type-12">I-II</label>
+            </div>
+            <div id="st-2">
+              <input type="checkbox" id="type-2" name="type-2" value="type-2" onchange="toggle_blinker()" checked>
+              <label for="type-2">II</label>
+            </div>
+            <div id="st-23">
+              <input type="checkbox" id="type-23" name="type-23" value="type-23" onchange="toggle_blinker()" checked>
+              <label for="type-23">II-III</label>
+            </div>
+            <div id="st-3">
+              <input type="checkbox" id="type-3" name="type-3" value="type-3" onchange="toggle_blinker()" checked>
+              <label for="type-3">III</label>
+            </div>
+            <div id="st-oth">
+              <input type="checkbox" id="type-other" name="type-other" value="type-other" onchange="toggle_blinker()" checked>
+              <label for="type-other">Other</label>
+            </div>
+            <div id="st-pil">
+              <input type="checkbox" id="type-pilot" name="type-pilot" value="type-pilot" onchange="toggle_blinker()" checked>
+              <label for="type-pilot">Pilot</label>
+            </div>
+          </div>
+          <br>
+          <span style="text-decoration: underline;">Sex:</span>
+          <div id="sex-choice">
+            <input type="checkbox" id="sex-f" name="sex-f" value="sex-f" onchange="toggle_blinker()" checked>
+            <label for="sex-f">Female</label><br>
+            <input type="checkbox" id="sex-m" name="sex-m" value="sex-m" onchange="toggle_blinker()" checked>
+            <label for="sex-m">Male</label>
+          </div>
+          <br>
+          <span style="text-decoration: underline;">Age:</span>
+          <div id="age-choice">
+            <input type="number" id="min-age" name="min-age" value="0" min="0" max="85" style='text-align:left;width: 65px;' onchange="toggle_blinker()" onchange='minAgeCheck(this)'>
+            to
+            <input type="number" id="max-age" name="max-age" value="120" min="0" max="120" style='text-align:left;width: 65px;' onchange="toggle_blinker()" onchange='maxAgeCheck(this)'>
+          </div>
+          <br>
+          <div id="update-blinker" class="blink_me">
+            <button type="button" class="fly-button" style="left:27px; font-weight: bold; height: 50px; width:140px; font-size: 30px; border: 4pt solid #800080;text-align: center; margin-bottom:5px; position:relative;z-index: 99;" onclick="update()">Update</button>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+  <div class="draggable" id="drag-3" style="left:85%;top:0px;z-index:15;">
+    <div class="widnow" id="win-3" style="background-color:#FFFFFF;">
+      <div class="title_bar" id="bar-3" style="background-color:#800080">
+        <div>
+          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-3">&nbsp&nbspState Accrual Table</span>
+            <div class="button" id="butt-3">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-3" style="font-family:'Arial',monospace;padding:5px;height:400px;background-color:transparent;overflow:scroll;overflow-x: hidden; scrollbar-width: thin; scrollbar-color: black white;">
+        <div id=table-hold>
+        <div><table class='tableA' id='state-table' style='width:230px;'></table></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="draggable" id="drag-4" style="left:60%;top:0px;z-index:15;">
+    <div class="widnow" id="win-4" style="background-color:#FFFFFF;">
+      <div class="title_bar" id="bar-4" style="background-color:#800080">
+        <div>
+          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-4">&nbsp&nbspWindow</span>
+            <div class="button" id="butt-4">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-4" style="font-family:'Arial',monospace;padding:5px;background-color:transparent; width:230px; text-align:center;">
+        <div><span id='state-title' style='font-size: 30px;font-weight:bold'></span></div>
+        <div><span id='state-value' style='font-size: 0px;font-weight:bold'></span></div>
+        <div><span id='national-value' style='font-size: 20px;'></span></div>
+        <div><span id='total-value' style='font-size: 20px;'></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="draggable" id="drag-5" style="left:800px;top:0px;z-index:15;">
+    <div class="widnow" id="win-5" style="background-color:#FFFFFF;">
+      <div class="title_bar" id="bar-5" style="background-color:#800080">
+        <div>
+          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-5">&nbsp&nbspTable View</span>
+            <div class="button" id="butt-5">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-5" style="font-family:'Arial',monospace;padding:5px;background-color:transparent; width:230px;">
+          <div>&nbsp<span id='win-3-state' style='font-size: 30px;font-weight:bold'></span></div>
+          <div>
+            <select name="data-category" id="data-category" onchange="addListToTable(ABB)">
+              <option value="REGPERIOD">Year</option>
+              <option value="STTYPE">Study Type</option>
+              <option value="SEX">Sex</option>
+              <option value="ADMIN">Admin</option>
+              <option value="REVAGENCY">Revagency</option>
+              <option value="RACE">Race</option>
+              <option value="ETHNICITY">Ethnicity</option>
+            </select>
+            &nbsp
+            <button type="button" id="table-button" class="fly-button" style="text-align: center; margin-bottom:5px; position:relative;z-index: 99;" onclick="console.log('clicked')">All</button>
+          </div>
+          <div><table class='tableC' id='cat-info' style='width:230px;'></table></div>
+      </div>
+    </div>
+  </div>
+
+  <div id=legend>
+    <div style="text-align: left; padding: 3px;">
+    <span class="circle" style="width: 10px; height: 10px; background: yellow; border: solid black 2px; border-radius: 50%; display: inline-block;"></span>
+    <span style="font-size:15px;"> Institutions </span>
+  </div>
+    <div class="leg-box" style="left:20px;background-color:#2F2F2F"></div>
+    <div class="leg-box" style="left:40px;background-color:#787478"></div>
+    <div class="leg-box" style="left:60px;background-color:#AEB0B9"></div>
+    <div class="leg-box" style="left:80px;background-color:#E0AEFF"></div>
+    <div class="leg-box" style="left:100px;background-color:#D899FF"></div>
+    <div class="leg-box" style="left:120px;background-color:#D085FF"></div>
+    <div class="leg-box" style="left:140px;background-color:#C870FF"></div>
+    <div class="leg-box" style="left:160px;background-color:#B947FF"></div>
+    <div class="leg-box" style="left:180px;background-color:#a412ff"></div>
+    <table class='tableB' id='leg' style="font-weight:100;">
+      <tr style="column-gap:40px;">
+        <th><span id="leg-0"></span></th>
+        <th><span id="leg-1"></span></th>
+        <th><span id="leg-2"></span></th>
+      </tr>
+    </table>
+  </div>
+
+<script>
+
+arrangeDraggables()
+loadCheckboxFunctions()
+setAllDataCheckboxes()
+buttonBoys()
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtbGVibGFuYyIsImEiOiJja2hneXNrOXUxOWdyMnF0OWgxdWRma3VsIn0.NClhc-lMIVbihpDxZ12YuQ';
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/samleblanc/ckmbcoz1tdlmx17qk0uiowjwr',
+  center:[-100,40],
+  zoom: 3.55,
+  pitch: 0,
+  bearing: 0,
+});
+
+update()
+
+var NAME = null;
+var ABB = null;
+var stateTotals = [];
+var allData;
+var pointsInCluster;
+var popUp1;
+var nationalSubtotals = [];
+
+function update(){
+  console.log('updating map...')
+  getInputLists()
+  d3.csv("data/fakeData.csv", function(data) {
+    allData = data;
+    console.log('updating data...')
+    stateTotals = [];
+    state_abbrs.forEach(abbr => {
+      d = data.filter(function(d){
+        return baseFilterByState(d,abbr)
+      })
+      stateTotals.push({'NAME':abbr, 'STATE':state_to_code[abbr], 'TOTAL':d.length})
+    });
+    nationalSubtotals = getNationalSubtotals()
+    matchExpression = getMatchExpression(stateTotals)
+    var max = d3.max(stateTotals, function(d) { return d["TOTAL"]; } );
+    updateLegend(max)
+    htmlStateList()
+  });
+  fillStates()
+}
+
+var hoveredId = null;
+map.on('load', function () {
+  addSources()
+  addLayers()
+  matchExpression = getMatchExpression(stateTotals)
+});
+map.on('mousemove', 'base-districts', function (e) {
+  hoveredId = setHoverState(e,hoveredId);
+});
+map.on('mouseleave', 'base-districts', function () {
+  removeHoverState(hoveredId);
+});
+map.on('click','clusters', function (e) {
+  clusterOnClick(e)
+});
+map.on('click', 'points', function (e) {
+  pointOnClick(e)
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+body { margin: 0; padding: 0; -moz-user-select: -moz-none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+#title { -moz-user-select: -moz-none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; position: absolute; -webkit-text-stroke: 2px black; text-shadow: 5px 5px 5px purple; top: 0; left: 0; color:#3786e4; padding-left:20px; font-size:70px; z-index:10; font-weight:900; font-family: 'Georgia', serif; }
+#leg { padding-top:17px; position:relative; left:-38px; border-collapse: separate; border-spacing: 10px 0px; }
+.leg-box{ position:absolute; background-color: rgb(255,255,255,0.7); font-family: sans-serif; height:20px; width:20px; }
+#legend{ position:fixed; left:60%; bottom: 0%; width: 180px; height: 60px; background: white; border: 3px solid black; border-radius: 5px; padding: 5px 20px 10px 20px; margin: 5px; box-shadow: 5px 5px 10px #000000; text-align: center; }
+table.tableA, table.tableA td, table.tableA th{ border: 1px solid transparent; border-bottom: 1pt solid grey; }
+table.tableB, table.tableB td, table.tableB th{ border: 1px solid transparent; table-layout: fixed; width: 67px; }
+table.tableC{ border: 1px solid transparent; width: 80px; }
+table.tableC td, table.tableC th{ border: 1px solid transparent; width: 80px; border-bottom: 1pt solid grey; }
+.all-button { background-color: #4CAF50; border: none; color: white; padding: 5px 10px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; transition-duration: 0.2s; border-radius: 5px; }
+.all-button:hover { background-color: red; color: white; }
+.fly-button { background-color: white; color: black; padding: 5px 10px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; transition-duration: 0.2s; border-radius: 10px; border: 2pt solid #800080; }
+.fly-button:hover { background-color: #800080; color: white; }
+.blink_me { animation: blinker 0s linear infinite; }
+@keyframes blinker { 25% { opacity: 0; } }
