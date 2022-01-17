@@ -61,9 +61,7 @@ function pointOnClick(e){
   setTimeout(function(){
     popUp1 = new mapboxgl.Popup()
     .setLngLat(coordinates)
-    .setHTML(
-      'Institution: ' + id
-    )
+    .setHTML(id)
     .addTo(map);
   },170);
 }

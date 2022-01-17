@@ -66,8 +66,8 @@ function addLayers(){
     source: 'NCI_all_locations',
     paint: {
       'circle-color': 'yellow',
-      'circle-radius': 3.5,
-      'circle-stroke-width': 1.5,
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 0, 10, 10],
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 2, 0, 2.01, 1.5],
       'circle-stroke-color': 'black'
     }
   });

@@ -18,9 +18,9 @@ function arrangeDraggables(){
   var width = window.innerWidth;
   var height = window.innerHeight;
   var place = (width - 280).toString().concat('px');
-  $('#drag-3').css('left',place)
-  $('#drag-5').css('left',place)
-  $('#drag-5').css('top','450px')
+  $('#drag-3').css('left','-1200px')
+  $('#drag-4').css('left',place)
+  $('#drag-5').css('left','-1200px')
   $('#viewbox').css('left', (width - 400).toString().concat('px'))
   $('#viewbox').css('top', (height - 120).toString().concat('px'))
   $("#state-title").css("color", "grey");

@@ -15,6 +15,7 @@
   <link rel="stylesheet" type="text/css" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"/>
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+  <script src="https://use.fontawesome.com/95f3ab6e3c.js"></script>
   <script src="scripts/buttonStuff.js"></script>
   <script src="scripts/checkboxNonsense.js"></script>
   <script src="scripts/nciGeoJson.js"></script>
@@ -35,21 +36,23 @@
 
   </style>
 </head>
-<body>
-  <div id="map"></div>
+<body style="background: lightgrey">
+  <div id="map" style="top:40px"></div>
   <div id='title'>
-  Accrual to SWOG Studies
+  Patient Accrual to SWOG Studies
+  <span style="font-size: 0.8em; position: fixed; top: 4px; padding-left: 20px;">
+    <i class="fa fa-database" onclick="move_drags(2)" aria-hidden="true" style="padding-left: 5px;"></i>
+    <i class="fa fa-hospital-o" onclick="move_drags(1)" aria-hidden="true" style="padding-left: 5px;"></i>
+    <i class="fa fa-table" onclick="move_drags(3)" aria-hidden="true" style="padding-left: 5px;"></i>
+    <i class="fa fa-plane" onclick="move_drags(4)" aria-hidden="true" style="padding-left: 5px;"></i>
+  </span>
 </div>
-<div id="viewbox" style="position:fixed;S">
-<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="lowerNAView()">Lower NA</button></div>
-<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullNAView()">Full NA</button></div>
-<div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullWorldView()">Full World</button></div>
-</div>
-  <div class="draggable" id="drag-1" style="left:10px;top:70px;z-index:15;">
-    <div class="widnow" id="win-1" style="background-color:#FFFFFF;">
-      <div class="title_bar" id="bar-1" style="background-color:#800080">
+
+  <div class="draggable" id="drag-1" style="left:-1200px;top:40px;z-index:15;">
+    <div class="widnow" id="win-1">
+      <div class="title_bar" id="bar-1">
         <div>
-          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-1">&nbsp&nbspInstitutions*</span>
+          <div><span class="bar-title" id="tit-1">&nbsp&nbspInstitutions*</span>
             <div class="button" id="butt-1">↕</div>
           </div>
         </div>
@@ -64,11 +67,11 @@
     </div>
   </div>
 
-  <div class="draggable" id="drag-2" style="left:10px;top:195px;z-index:15;">
-    <div class="widnow" id="win-2" style="background-color:#FFFFFF;width:220px;">
-      <div class="title_bar" id="bar-2" style="background-color:#800080">
+  <div class="draggable" id="drag-2" style="left:-0px;top:150px;z-index:15;">
+    <div class="widnow" id="win-2" style="width:220px;">
+      <div class="title_bar" id="bar-2">
         <div>
-          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-2">&nbsp&nbspData Select</span>
+          <div><span class="bar-title" id="tit-2">&nbsp&nbspData Selection</span>
             <div class="button" id="butt-2">↕</div>
           </div>
         </div>
@@ -234,19 +237,19 @@
           </div>
           <br>
           <div id="update-blinker" class="blink_me">
-            <button type="button" class="fly-button" style="left:27px; font-weight: bold; height: 50px; width:140px; font-size: 30px; border: 4pt solid #800080;text-align: center; margin-bottom:5px; position:relative;z-index: 99;" onclick="update()">Update</button>
+            <button type="button" class="fly-button" style="left:27px; font-weight: bold; height: 50px; width:140px; font-size: 24px; border: 4pt solid #002D62;text-align: center; margin-bottom:5px; position:relative;z-index: 99;" onclick="update()">Redraw</button>
           </div>
         </div>
 
     </div>
   </div>
-</div>
+  </div>
 
-  <div class="draggable" id="drag-3" style="left:85%;top:0px;z-index:15;">
-    <div class="widnow" id="win-3" style="background-color:#FFFFFF;">
-      <div class="title_bar" id="bar-3" style="background-color:#800080">
+  <div class="draggable" id="drag-3" style="left:-1200px;top:40px;z-index:15;">
+    <div class="widnow" id="win-3">
+      <div class="title_bar" id="bar-3">
         <div>
-          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-3">&nbsp&nbspState Accrual Table</span>
+          <div><span class="bar-title" id="tit-3">&nbsp&nbspState Accrual Table</span>
             <div class="button" id="butt-3">↕</div>
           </div>
         </div>
@@ -259,11 +262,11 @@
     </div>
   </div>
 
-  <div class="draggable" id="drag-4" style="left:60%;top:0px;z-index:15;">
-    <div class="widnow" id="win-4" style="background-color:#FFFFFF;">
-      <div class="title_bar" id="bar-4" style="background-color:#800080">
+  <div class="draggable" id="drag-4" style="left:300px;top:495px;z-index:15;">
+    <div class="widnow" id="win-4">
+      <div class="title_bar" id="bar-4" >
         <div>
-          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-4">&nbsp&nbspWindow</span>
+          <div><span class="bar-title" id="tit-4">&nbsp&nbspAccrual by Region</span>
             <div class="button" id="butt-4">↕</div>
           </div>
         </div>
@@ -277,18 +280,18 @@
     </div>
   </div>
 
-  <div class="draggable" id="drag-5" style="left:800px;top:0px;z-index:15;">
-    <div class="widnow" id="win-5" style="background-color:#FFFFFF;">
-      <div class="title_bar" id="bar-5" style="background-color:#800080">
+  <div class="draggable" id="drag-5" style="left:300px;top:40px;z-index:15;">
+    <div class="widnow" id="win-5">
+      <div class="title_bar" id="bar-5" >
         <div>
-          <div><span class="bar-title" style="color:white; font-weight:bold;" id="tit-5">&nbsp&nbspTable View</span>
+          <div><span class="bar-title" id="tit-5">&nbsp&nbspTable View</span>
             <div class="button" id="butt-5">↕</div>
           </div>
         </div>
       </div>
       <div class="box" id="box-5" style="font-family:'Arial',monospace;padding:5px;background-color:transparent; width:230px;">
           <div>&nbsp<span id='win-3-state' style='font-size: 30px;font-weight:bold'></span></div>
-          <div>
+          <div style="padding-top:3px">
             <select name="data-category" id="data-category" onchange="addListToTable(ABB)">
               <option value="REGPERIOD">Year</option>
               <option value="STTYPE">Study Type</option>
@@ -307,10 +310,10 @@
   </div>
 
   <div id=legend>
-    <div style="text-align: left; padding: 3px;">
-    <span class="circle" style="width: 10px; height: 10px; background: yellow; border: solid black 2px; border-radius: 50%; display: inline-block;"></span>
-    <span style="font-size:15px;"> Institutions </span>
-  </div>
+    <!-- <div style="text-align: left; padding: 3px;">
+      <span class="circle" style="width: 10px; height: 10px; background: yellow; border: solid black 2px; border-radius: 50%; display: inline-block;"></span>
+      <span style="font-size:15px;"> Institutions </span>
+    </div> -->
     <div class="leg-box" style="left:20px;background-color:#2F2F2F"></div>
     <div class="leg-box" style="left:40px;background-color:#787478"></div>
     <div class="leg-box" style="left:60px;background-color:#AEB0B9"></div>
@@ -327,6 +330,23 @@
         <th><span id="leg-2"></span></th>
       </tr>
     </table>
+  </div>
+
+  <div class="draggable" id="drag-6" style="left:-1200px;top:603px;z-index:15;">
+    <div class="widnow" id="win-6">
+      <div class="title_bar" id="bar-6" >
+        <div>
+          <div><span class="bar-title" id="tit-6">&nbsp&nbspFly To</span>
+            <div class="button" id="butt-6">↕</div>
+          </div>
+        </div>
+      </div>
+      <div class="box" id="box-6" style="font-family:'Arial',monospace;padding:10px 5px 5px 10px;background-color:transparent; width:100px; text-align:center;">
+        <div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="lowerNAView()">Lower NA</button></div>
+        <div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullNAView()">Full NA</button></div>
+        <div><button type="button" class="fly-button" style="width: 100px; text-align: center; margin-bottom:5px;position:relative;z-index: 99;" onclick="fullWorldView()">Full World</button></div>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -368,6 +388,7 @@ function update(){
       })
       stateTotals.push({'NAME':abbr, 'STATE':state_to_code[abbr], 'TOTAL':d.length})
     });
+    try{ filterInstitutions() } catch {}
     nationalSubtotals = getNationalSubtotals()
     matchExpression = getMatchExpression(stateTotals)
     var max = d3.max(stateTotals, function(d) { return d["TOTAL"]; } );

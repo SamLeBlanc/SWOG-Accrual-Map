@@ -7,16 +7,33 @@ function getInputLists(){
   ageList = [parseInt($('#min-age')[0].value), parseInt($('#max-age')[0].value)]
 }
 
+function filterInstitutions(){
+  d1 = allData.filter(function(d){
+    return baseFilter(d)
+  })
+
+  var institutions = []
+  d1.forEach(function(d){
+    institutions.push(d.INSTNAME)
+  })
+
+  institutions = [...new Set(institutions)];
+  map.setFilter('points', ['match', ['get', 'id'], institutions, true, false]);
+
+  return institutions
+}
+
 function getNationalSubtotals(){
   d1 = allData.filter(function(d){
     return baseFilter(d)
   })
+
   var fullTotal = d1.length
   var canadaTotal = d1.filter(function(d){ return d["COUNTRY"] == 'CA' }).length;
   var usaTotal = d1.filter(function(d){ return d["COUNTRY"] == 'US' }).length
   var intlTotal = d1.filter(function(d){ return (d["COUNTRY"] != 'US' && d["COUNTRY"] != 'CA')}).length
 
-  $("#total-value").text('Full Accrual: ' + (fullTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+  $("#total-value").text('Total Accrual: ' + (fullTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
   $("#national-value").text("");
   return [usaTotal,canadaTotal,intlTotal]
 }
